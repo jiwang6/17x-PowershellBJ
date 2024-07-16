@@ -40,13 +40,15 @@ function get_continue_bool {
 }
 
 function tally_score($hand, [ref]$total) { # TODO: convert pass by value
+    $total.Value = 0
     $ace_count = 0
     foreach ($card in $hand) {
         $face = $card.Substring(0, $card.Length - 1)
+        # Assuming $total is an object with a Value property and $ace_count is initialized
         switch ($face) {
-            {'J', 'Q', 'K'} { $total.Value += 10 }
-            {'A'} { $ace_count += 1 }
-            default { $total.Value += $face }
+            {$_ -eq 'J' -or $_ -eq 'Q' -or $_ -eq 'K'} { $total.Value += 10 }
+            {$_ -eq 'A'} { $ace_count += 1 }
+            default { $total.Value += [int]$face }
         }
     }
     # check for aces
@@ -81,11 +83,12 @@ function main_game_loop(){
     $deck = $deck[2..$deck.Count]
 
 
+
     # Player's turn
+    $player_total = 0
     do {
         Clear-Host
         print_hand $player_hand $dealer_hand
-        $Player_total = 0
         $user_input = Read-Host "Do you want to hit or stay?"
         if ($user_input -eq 'hit') {
             Clear-Host
@@ -93,8 +96,9 @@ function main_game_loop(){
             $deck = $deck[1..$deck.Count]
             Write-Host "Player Hand: $($player_hand -join ' ')"
 
-            tally_score $player_hand ([ref]$player_total)
+
         }
+        tally_score $player_hand ([ref]$player_total)
     } while ($user_input -eq 'hit' -and $player_total -lt 21)
 
     # Dealer's turn
@@ -105,21 +109,26 @@ function main_game_loop(){
         if ($dealer_total -lt 17) {
             $dealer_hand += $deck[0]
             $deck = $deck[1..$deck.Count]
+            tally_score $dealer_hand ([ref]$dealer_total)
         }
     } while ($dealer_total -lt 17)
 
     # Display dealer hand
     Write-Host "Dealer Hand: $($dealer_hand -join ' ')"
 
+    "Player score: $player_total"
+    "Dealer score: $dealer_total"
     # Determine winner
-    switch ($Player_total){
-        {$Player_total -eq 21}{Write-Host "Blackjack! Player wins!"; return}
+    switch ($player_total){
+        {$player_total -gt 21 -and $dealer_total -gt 21}
+            {Write-Host "Both bust! Push!"; return}
+        {$player_total -eq 21}{Write-Host "Blackjack! Player wins!"; return}
         {$dealer_total -eq 21}{Write-Host "Blackjack! Dealer wins!"; return}
-        {$Player_total -gt 21}{Write-Host "Player busts! Dealer wins!"; return}
+        {$player_total -gt 21}{Write-Host "Player busts! Dealer wins!"; return}
         {$dealer_total -gt 21}{Write-Host "Dealer busts! Player wins!"; return}
         {$player_total -gt $dealer_total}{Write-Host "Player wins!"; return}
         {$player_total -lt $dealer_total}{Write-Host "Dealer wins!"; return}
-        default{Write-Host "It's a tie!"; return}
+        default{Write-Host "It's a tie!"; return} # both bust; thing nick mentioned
     }
 }
 
