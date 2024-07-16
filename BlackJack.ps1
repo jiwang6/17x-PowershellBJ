@@ -31,12 +31,22 @@ function get_shuffled_deck(){
 }
 
 function get_continue_bool {
-    $user_cont = Read-Host "Do you want to play another game (y/n)?" # TODO: Add validation for terms other than y/n
-    if ($user_cont -eq 'n') {
-        return $false
-    } else {
-        return $true
+     # TODO: Add validation for terms other than y/n
+    do {
+        $user_cont = Read-Host "Do you want to play another game (y/n)?"
+        if ($user_cont -ne 'y' -and $user_cont -ne 'n') {
+            Clear-Host
+            Write-Host "Please input y/n"
+        }
+        elseif ($user_cont -eq 'n') {
+            return $false
+        } elseif ($user_cont -eq 'y') {
+            return $true
+        }
+    } while($user_cont -ne 'y' -and $user_cont -ne 'n') {
+        
     }
+
 }
 
 function tally_score($hand, [ref]$total) { # TODO: convert pass by value
@@ -82,24 +92,23 @@ function main_game_loop(){
     $dealer_hand += $deck[1]
     $deck = $deck[2..$deck.Count]
 
-
-
     # Player's turn
     $player_total = 0
     do {
-        Clear-Host
         print_hand $player_hand $dealer_hand
         $user_input = Read-Host "Do you want to hit or stay?"
-        if ($user_input -eq 'hit') {
-            Clear-Host
-            $player_hand += $deck[0]
-            $deck = $deck[1..$deck.Count]
-            Write-Host "Player Hand: $($player_hand -join ' ')"
-
-
+        if ($user_input -ne 'stay') {
+            if ($user_input -eq 'hit') {
+                $player_hand += $deck[0]
+                $deck = $deck[1..$deck.Count]
+                Write-Host "Player Hand: $($player_hand -join ' ')"
+                Clear-Host
+            }
+            else {Clear-Host; Write-Host "Please write either hit or stay"}
         }
+        #else {Write-Host "Please write either hit or stay"}
         tally_score $player_hand ([ref]$player_total)
-    } while ($user_input -eq 'hit' -and $player_total -lt 21)
+    } while (($user_input -eq 'hit') -or ($user_input -ne 'stay') -and $player_total -lt 21)
 
     # Dealer's turn
     $dealer_total = 0
@@ -128,7 +137,7 @@ function main_game_loop(){
         {$dealer_total -gt 21}{Write-Host "Dealer busts! Player wins!"; return}
         {$player_total -gt $dealer_total}{Write-Host "Player wins!"; return}
         {$player_total -lt $dealer_total}{Write-Host "Dealer wins!"; return}
-        default{Write-Host "It's a tie!"; return} # both bust; thing nick mentioned
+        default{Write-Host "It's a tie!"; return} # both bust
     }
 }
 
