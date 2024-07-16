@@ -1,0 +1,5 @@
+{
+    "powershell.powerShellExePath": "/usr/local/microsoft/powershell/6/pwsh",
+    "terminal.integrated.shell.osx": "/usr/local/bin/pwsh",
+    "terminal.integrated.shellArgs.osx": []
+  }

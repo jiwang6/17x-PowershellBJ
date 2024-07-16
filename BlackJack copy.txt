@@ -1,0 +1,119 @@
+<#
+    Name: BlackJack.ps1
+    Date: 16 July 2024
+    Crew:
+        1st Lt Jim Wang
+        2d Lt Ryan Thomas
+        Mr. Nick Fletcher
+
+    Description:
+        1v1 the dealer in a game of BlackJack. The game will be played in the 
+        console and will be text based. The game will be played with a single
+        deck of cards. The player will be able to hit or stay. The dealer will
+        hit until they reach 17 or higher. The player will be able to play
+        multiple games in a row. The player will be able to quit at any time.
+        The player will be able to see the dealer's hand at the end of the game.
+#>
+
+function get_shuffled_deck(){
+    $faces = @('2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A')
+    $suits = @('♠', '♣', '♦', '♥')
+    $deck = @()
+    
+    # Build deck of cards
+    foreach ($face in $faces) {
+        foreach ($suit in $suits) {
+            $deck += "$face$suit"
+        }
+    }
+
+    return ($deck | Get-Random -Count $deck.Count )
+}
+
+function get_continue_bool {
+    $user_cont = Read-Host "Do you want to play another game (y/n)?" # TODO: Add validation for terms other than y/n
+    if ($user_cont -eq 'n') {
+        return $false
+    } else {
+        return $true
+    }
+}
+
+# main loop
+function main_game_loop(){
+    $deck = get_shuffled_deck
+    $player_hand = @()
+    $dealer_hand = @()
+
+    # Deal two cards to player
+    $player_hand += $deck[0]
+    $player_hand += $deck[1]
+    $deck = $deck[2..$deck.Count]
+
+    # Deal two cards to dealer
+    $dealer_hand += $deck[0]
+    $dealer_hand += $deck[1]
+    $deck = $deck[2..$deck.Count]
+
+    # Display player hand
+    Write-Host "Player Hand: $($player_hand[0]) $($player_hand[1])"
+
+    # Display dealer hand
+    Write-Host "Dealer Hand: $($dealer_hand[0]) ?"
+
+    # Player's turn
+    do {
+        $user_input = Read-Host "Do you want to hit or stay?"
+        if ($user_input -eq 'hit') {
+            $player_hand += $deck[0]
+            $deck = $deck[1..$deck.Count]
+            Write-Host "Player Hand: $($player_hand -join ' ')"
+        }
+    } while ($user_input -eq 'hit')
+
+    # Dealer's turn
+    do {
+        $dealer_total = 0
+        foreach ($card in $dealer_hand) {
+            $face = $card.Substring(0, $card.Length - 1)
+            if ($face -eq 'J' -or $face -eq 'Q' -or $face -eq 'K') {
+                $dealer_total += 10
+            } elseif ($face -eq 'A') {
+                $dealer_total += 11
+            } else {
+                $dealer_total += $face
+            }
+        }
+
+        if ($dealer_total -lt 17) {
+            $dealer_hand += $deck[0]
+            $deck = $deck[1..$deck.Count]
+        }
+    } while ($dealer_total -lt 17)
+
+    # Display dealer hand
+    Write-Host "Dealer Hand: $($dealer_hand -join ' ')"
+
+    # Determine winner
+}
+
+
+
+function blackjack() {
+    do {
+    
+        main_game_loop
+
+
+
+
+
+    
+    } while (get_continue_bool)
+
+
+    "Thank you for playing"
+}
+
+
+blackjack
