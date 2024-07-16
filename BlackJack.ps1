@@ -30,10 +30,10 @@ function get_shuffled_deck(){
     return ($deck | Get-Random -Count $deck.Count )
 }
 
-function get_continue_bool {
+function get_continue_bool {    
      # TODO: Add validation for terms other than y/n
     do {
-        $user_cont = Read-Host "Do you want to play another game (y/n)?"
+        $user_cont = Read-Host "Do you want to play another game (y/n)?. Remember, 99% of gamblers quit right before they hit the jackpot."
         if ($user_cont -ne 'y' -and $user_cont -ne 'n') {
             Clear-Host
             Write-Host "Please input y/n"
@@ -106,7 +106,6 @@ function main_game_loop(){
             }
             else {Clear-Host; Write-Host "Please write either hit or stay"}
         }
-        #else {Write-Host "Please write either hit or stay"}
         tally_score $player_hand ([ref]$player_total)
     } while (($user_input -eq 'hit') -or ($user_input -ne 'stay') -and $player_total -lt 21)
 
@@ -128,17 +127,158 @@ function main_game_loop(){
     "Player score: $player_total"
     "Dealer score: $dealer_total"
     # Determine winner
-    switch ($player_total){
-        {$player_total -gt 21 -and $dealer_total -gt 21}
-            {Write-Host "Both bust! Push!"; return}
-        {$player_total -eq 21}{Write-Host "Blackjack! Player wins!"; return}
-        {$dealer_total -eq 21}{Write-Host "Blackjack! Dealer wins!"; return}
-        {$player_total -gt 21}{Write-Host "Player busts! Dealer wins!"; return}
-        {$dealer_total -gt 21}{Write-Host "Dealer busts! Player wins!"; return}
-        {$player_total -gt $dealer_total}{Write-Host "Player wins!"; return}
-        {$player_total -lt $dealer_total}{Write-Host "Dealer wins!"; return}
-        default{Write-Host "It's a tie!"; return} # both bust
-    }
+    switch ($player_total){ 
+        {$player_total -gt 21 -and $dealer_total -gt 21}{Write-Host "                                                               
+                                                                           
+PPPPPPPPPPPPPPPPP                                     hhhhhhh              
+P::::::::::::::::P                                    h:::::h              
+P::::::PPPPPP:::::P                                   h:::::h              
+PP:::::P     P:::::P                                  h:::::h              
+  P::::P     P:::::Puuuuuu    uuuuuu      ssssssssss   h::::h hhhhh        
+  P::::P     P:::::Pu::::u    u::::u    ss::::::::::s  h::::hh:::::hhh     
+  P::::PPPPPP:::::P u::::u    u::::u  ss:::::::::::::s h::::::::::::::hh   
+  P:::::::::::::PP  u::::u    u::::u  s::::::ssss:::::sh:::::::hhh::::::h  
+  P::::PPPPPPPPP    u::::u    u::::u   s:::::s  ssssss h::::::h   h::::::h 
+  P::::P            u::::u    u::::u     s::::::s      h:::::h     h:::::h 
+  P::::P            u::::u    u::::u        s::::::s   h:::::h     h:::::h 
+  P::::P            u:::::uuuu:::::u  ssssss   s:::::s h:::::h     h:::::h 
+PP::::::PP          u:::::::::::::::uus:::::ssss::::::sh:::::h     h:::::h 
+P::::::::P           u:::::::::::::::us::::::::::::::s h:::::h     h:::::h 
+P::::::::P            uu::::::::uu:::u s:::::::::::ss  h:::::h     h:::::h 
+PPPPPPPPPP              uuuuuuuu  uuuu  sssssssssss    hhhhhhh     hhhhhhh         
+                                        
+"}
+        {$player_total -gt 21 -and $dealer_total -gt 21}{Write-Host "Both bust! Push!"; return} 
+        {$player_total -eq 21}{Write-Host "                                                                                                         
+                                                                                                                                   
+YYYYYYY       YYYYYYY                                     WWWWWWWW                           WWWWWWWW iiii                    !!!  
+Y:::::Y       Y:::::Y                                     W::::::W                           W::::::Wi::::i                  !!:!! 
+Y:::::Y       Y:::::Y                                     W::::::W                           W::::::W iiii                   !:::! 
+Y::::::Y     Y::::::Y                                     W::::::W                           W::::::W                        !:::! 
+YYY:::::Y   Y:::::YYYooooooooooo   uuuuuu    uuuuuu        W:::::W           WWWWW           W:::::Wiiiiiiinnnn  nnnnnnnn    !:::! 
+   Y:::::Y Y:::::Y oo:::::::::::oo u::::u    u::::u         W:::::W         W:::::W         W:::::W i:::::in:::nn::::::::nn  !:::! 
+    Y:::::Y:::::Y o:::::::::::::::ou::::u    u::::u          W:::::W       W:::::::W       W:::::W   i::::in::::::::::::::nn !:::! 
+     Y:::::::::Y  o:::::ooooo:::::ou::::u    u::::u           W:::::W     W:::::::::W     W:::::W    i::::inn:::::::::::::::n!:::! 
+      Y:::::::Y   o::::o     o::::ou::::u    u::::u            W:::::W   W:::::W:::::W   W:::::W     i::::i  n:::::nnnn:::::n!:::! 
+       Y:::::Y    o::::o     o::::ou::::u    u::::u             W:::::W W:::::W W:::::W W:::::W      i::::i  n::::n    n::::n!:::! 
+       Y:::::Y    o::::o     o::::ou::::u    u::::u              W:::::W:::::W   W:::::W:::::W       i::::i  n::::n    n::::n!!:!! 
+       Y:::::Y    o::::o     o::::ou:::::uuuu:::::u               W:::::::::W     W:::::::::W        i::::i  n::::n    n::::n !!!  
+       Y:::::Y    o:::::ooooo:::::ou:::::::::::::::uu              W:::::::W       W:::::::W        i::::::i n::::n    n::::n      
+    YYYY:::::YYYY o:::::::::::::::o u:::::::::::::::u               W:::::W         W:::::W         i::::::i n::::n    n::::n !!!  
+    Y:::::::::::Y  oo:::::::::::oo   uu::::::::uu:::u                W:::W           W:::W          i::::::i n::::n    n::::n!!:!! 
+    YYYYYYYYYYYYY    ooooooooooo       uuuuuuuu  uuuu                 WWW             WWW           iiiiiiii nnnnnn    nnnnnn !!!  
+                                                                                                                                                                                                                                                      
+"} 
+        {$player_total -eq 21}{Write-Host "Blackjack! Player wins!"; return} 
+        {$dealer_total -eq 21}{Write-Host " 
+                                                                                                                                                                                               
+LLLLLLLLLLL                  OOOOOOOOO        SSSSSSSSSSSSSSS EEEEEEEEEEEEEEEEEEEEEERRRRRRRRRRRRRRRRR    
+L:::::::::L                OO:::::::::OO    SS:::::::::::::::SE::::::::::::::::::::ER::::::::::::::::R   
+L:::::::::L              OO:::::::::::::OO S:::::SSSSSS::::::SE::::::::::::::::::::ER::::::RRRRRR:::::R  
+LL:::::::LL             O:::::::OOO:::::::OS:::::S     SSSSSSSEE::::::EEEEEEEEE::::ERR:::::R     R:::::R 
+  L:::::L               O::::::O   O::::::OS:::::S              E:::::E       EEEEEE  R::::R     R:::::R 
+  L:::::L               O:::::O     O:::::OS:::::S              E:::::E               R::::R     R:::::R 
+  L:::::L               O:::::O     O:::::O S::::SSSS           E::::::EEEEEEEEEE     R::::RRRRRR:::::R  
+  L:::::L               O:::::O     O:::::O  SS::::::SSSSS      E:::::::::::::::E     R:::::::::::::RR   
+  L:::::L               O:::::O     O:::::O    SSS::::::::SS    E:::::::::::::::E     R::::RRRRRR:::::R  
+  L:::::L               O:::::O     O:::::O       SSSSSS::::S   E::::::EEEEEEEEEE     R::::R     R:::::R 
+  L:::::L               O:::::O     O:::::O            S:::::S  E:::::E               R::::R     R:::::R 
+  L:::::L         LLLLLLO::::::O   O::::::O            S:::::S  E:::::E       EEEEEE  R::::R     R:::::R 
+LL:::::::LLLLLLLLL:::::LO:::::::OOO:::::::OSSSSSSS     S:::::SEE::::::EEEEEEEE:::::ERR:::::R     R:::::R 
+L::::::::::::::::::::::L OO:::::::::::::OO S::::::SSSSSS:::::SE::::::::::::::::::::ER::::::R     R:::::R 
+L::::::::::::::::::::::L   OO:::::::::OO   S:::::::::::::::SS E::::::::::::::::::::ER::::::R     R:::::R 
+LLLLLLLLLLLLLLLLLLLLLLLL     OOOOOOOOO      SSSSSSSSSSSSSSS   EEEEEEEEEEEEEEEEEEEEEERRRRRRRR     RRRRRRR                                                                                           
+                                                                                                         
+ "} 
+        {$dealer_total -eq 21}{Write-Host "Blackjack! Dealer wins!"; return} 
+        {$player_total -gt 21}{Write-Host "                                                                      
+                                                                                    
+BBBBBBBBBBBBBBBBB   UUUUUUUU     UUUUUUUU   SSSSSSSSSSSSSSS TTTTTTTTTTTTTTTTTTTTTTT 
+B::::::::::::::::B  U::::::U     U::::::U SS:::::::::::::::ST:::::::::::::::::::::T 
+B::::::BBBBBB:::::B U::::::U     U::::::US:::::SSSSSS::::::ST:::::::::::::::::::::T 
+BB:::::B     B:::::BUU:::::U     U:::::UUS:::::S     SSSSSSST:::::TT:::::::TT:::::T 
+  B::::B     B:::::B U:::::U     U:::::U S:::::S            TTTTTT  T:::::T  TTTTTT 
+  B::::B     B:::::B U:::::D     D:::::U S:::::S                    T:::::T         
+  B::::BBBBBB:::::B  U:::::D     D:::::U  S::::SSSS                 T:::::T         
+  B:::::::::::::BB   U:::::D     D:::::U   SS::::::SSSSS            T:::::T         
+  B::::BBBBBB:::::B  U:::::D     D:::::U     SSS::::::::SS          T:::::T         
+  B::::B     B:::::B U:::::D     D:::::U        SSSSSS::::S         T:::::T         
+  B::::B     B:::::B U:::::D     D:::::U             S:::::S        T:::::T         
+  B::::B     B:::::B U::::::U   U::::::U             S:::::S        T:::::T         
+BB:::::BBBBBB::::::B U:::::::UUU:::::::U SSSSSSS     S:::::S      TT:::::::TT       
+B:::::::::::::::::B   UU:::::::::::::UU  S::::::SSSSSS:::::S      T:::::::::T       
+B::::::::::::::::B      UU:::::::::UU    S:::::::::::::::SS       T:::::::::T       
+BBBBBBBBBBBBBBBBB         UUUUUUUUU       SSSSSSSSSSSSSSS         TTTTTTTTTTT       
+                                                                                                                                                           
+ "} 
+        {$player_total -gt 21}{Write-Host "Player busts! Dealer wins!"; return} 
+        {$dealer_total -gt 21}{Write-Host " 
+                                                                                                                                                                                                                                                  
+YYYYYYY       YYYYYYY                                     WWWWWWWW                           WWWWWWWW iiii                    !!!  
+Y:::::Y       Y:::::Y                                     W::::::W                           W::::::Wi::::i                  !!:!! 
+Y:::::Y       Y:::::Y                                     W::::::W                           W::::::W iiii                   !:::! 
+Y::::::Y     Y::::::Y                                     W::::::W                           W::::::W                        !:::! 
+YYY:::::Y   Y:::::YYYooooooooooo   uuuuuu    uuuuuu        W:::::W           WWWWW           W:::::Wiiiiiiinnnn  nnnnnnnn    !:::! 
+   Y:::::Y Y:::::Y oo:::::::::::oo u::::u    u::::u         W:::::W         W:::::W         W:::::W i:::::in:::nn::::::::nn  !:::! 
+    Y:::::Y:::::Y o:::::::::::::::ou::::u    u::::u          W:::::W       W:::::::W       W:::::W   i::::in::::::::::::::nn !:::! 
+     Y:::::::::Y  o:::::ooooo:::::ou::::u    u::::u           W:::::W     W:::::::::W     W:::::W    i::::inn:::::::::::::::n!:::! 
+      Y:::::::Y   o::::o     o::::ou::::u    u::::u            W:::::W   W:::::W:::::W   W:::::W     i::::i  n:::::nnnn:::::n!:::! 
+       Y:::::Y    o::::o     o::::ou::::u    u::::u             W:::::W W:::::W W:::::W W:::::W      i::::i  n::::n    n::::n!:::! 
+       Y:::::Y    o::::o     o::::ou::::u    u::::u              W:::::W:::::W   W:::::W:::::W       i::::i  n::::n    n::::n!!:!! 
+       Y:::::Y    o::::o     o::::ou:::::uuuu:::::u               W:::::::::W     W:::::::::W        i::::i  n::::n    n::::n !!!  
+       Y:::::Y    o:::::ooooo:::::ou:::::::::::::::uu              W:::::::W       W:::::::W        i::::::i n::::n    n::::n      
+    YYYY:::::YYYY o:::::::::::::::o u:::::::::::::::u               W:::::W         W:::::W         i::::::i n::::n    n::::n !!!  
+    Y:::::::::::Y  oo:::::::::::oo   uu::::::::uu:::u                W:::W           W:::W          i::::::i n::::n    n::::n!!:!! 
+    YYYYYYYYYYYYY    ooooooooooo       uuuuuuuu  uuuu                 WWW             WWW           iiiiiiii nnnnnn    nnnnnn !!!  
+
+"} 
+        {$dealer_total -gt 21}{Write-Host "Dealer busts! Player wins!"; return} 
+        {$player_total -gt $dealer_total}{Write-Host " 
+
+YYYYYYY       YYYYYYY                                     WWWWWWWW                           WWWWWWWW iiii                    !!!  
+Y:::::Y       Y:::::Y                                     W::::::W                           W::::::Wi::::i                  !!:!! 
+Y:::::Y       Y:::::Y                                     W::::::W                           W::::::W iiii                   !:::! 
+Y::::::Y     Y::::::Y                                     W::::::W                           W::::::W                        !:::! 
+YYY:::::Y   Y:::::YYYooooooooooo   uuuuuu    uuuuuu        W:::::W           WWWWW           W:::::Wiiiiiiinnnn  nnnnnnnn    !:::! 
+   Y:::::Y Y:::::Y oo:::::::::::oo u::::u    u::::u         W:::::W         W:::::W         W:::::W i:::::in:::nn::::::::nn  !:::! 
+    Y:::::Y:::::Y o:::::::::::::::ou::::u    u::::u          W:::::W       W:::::::W       W:::::W   i::::in::::::::::::::nn !:::! 
+     Y:::::::::Y  o:::::ooooo:::::ou::::u    u::::u           W:::::W     W:::::::::W     W:::::W    i::::inn:::::::::::::::n!:::! 
+      Y:::::::Y   o::::o     o::::ou::::u    u::::u            W:::::W   W:::::W:::::W   W:::::W     i::::i  n:::::nnnn:::::n!:::! 
+       Y:::::Y    o::::o     o::::ou::::u    u::::u             W:::::W W:::::W W:::::W W:::::W      i::::i  n::::n    n::::n!:::! 
+       Y:::::Y    o::::o     o::::ou::::u    u::::u              W:::::W:::::W   W:::::W:::::W       i::::i  n::::n    n::::n!!:!! 
+       Y:::::Y    o::::o     o::::ou:::::uuuu:::::u               W:::::::::W     W:::::::::W        i::::i  n::::n    n::::n !!!  
+       Y:::::Y    o:::::ooooo:::::ou:::::::::::::::uu              W:::::::W       W:::::::W        i::::::i n::::n    n::::n      
+    YYYY:::::YYYY o:::::::::::::::o u:::::::::::::::u               W:::::W         W:::::W         i::::::i n::::n    n::::n !!!  
+    Y:::::::::::Y  oo:::::::::::oo   uu::::::::uu:::u                W:::W           W:::W          i::::::i n::::n    n::::n!!:!! 
+    YYYYYYYYYYYYY    ooooooooooo       uuuuuuuu  uuuu                 WWW             WWW           iiiiiiii nnnnnn    nnnnnn !!!                                                                                                                        
+                                                                                                                                
+"} 
+        {$player_total -gt $dealer_total}{Write-Host "Player wins!"; return} 
+        {$player_total -lt $dealer_total}{Write-Host "                                                                                             
+                                                                                                         
+LLLLLLLLLLL                  OOOOOOOOO        SSSSSSSSSSSSSSS EEEEEEEEEEEEEEEEEEEEEERRRRRRRRRRRRRRRRR    
+L:::::::::L                OO:::::::::OO    SS:::::::::::::::SE::::::::::::::::::::ER::::::::::::::::R   
+L:::::::::L              OO:::::::::::::OO S:::::SSSSSS::::::SE::::::::::::::::::::ER::::::RRRRRR:::::R  
+LL:::::::LL             O:::::::OOO:::::::OS:::::S     SSSSSSSEE::::::EEEEEEEEE::::ERR:::::R     R:::::R 
+  L:::::L               O::::::O   O::::::OS:::::S              E:::::E       EEEEEE  R::::R     R:::::R 
+  L:::::L               O:::::O     O:::::OS:::::S              E:::::E               R::::R     R:::::R 
+  L:::::L               O:::::O     O:::::O S::::SSSS           E::::::EEEEEEEEEE     R::::RRRRRR:::::R  
+  L:::::L               O:::::O     O:::::O  SS::::::SSSSS      E:::::::::::::::E     R:::::::::::::RR   
+  L:::::L               O:::::O     O:::::O    SSS::::::::SS    E:::::::::::::::E     R::::RRRRRR:::::R  
+  L:::::L               O:::::O     O:::::O       SSSSSS::::S   E::::::EEEEEEEEEE     R::::R     R:::::R 
+  L:::::L               O:::::O     O:::::O            S:::::S  E:::::E               R::::R     R:::::R 
+  L:::::L         LLLLLLO::::::O   O::::::O            S:::::S  E:::::E       EEEEEE  R::::R     R:::::R 
+LL:::::::LLLLLLLLL:::::LO:::::::OOO:::::::OSSSSSSS     S:::::SEE::::::EEEEEEEE:::::ERR:::::R     R:::::R 
+L::::::::::::::::::::::L OO:::::::::::::OO S::::::SSSSSS:::::SE::::::::::::::::::::ER::::::R     R:::::R 
+L::::::::::::::::::::::L   OO:::::::::OO   S:::::::::::::::SS E::::::::::::::::::::ER::::::R     R:::::R 
+LLLLLLLLLLLLLLLLLLLLLLLL     OOOOOOOOO      SSSSSSSSSSSSSSS   EEEEEEEEEEEEEEEEEEEEEERRRRRRRR     RRRRRRR
+                                                                                                 
+ "} 
+        {$player_total -lt $dealer_total}{Write-Host "Dealer wins!"; return} 
+        default{Write-Host "It's a tie!"; return} # both bust; thing nick mentioned 
+
+} 
+
 }
 
 
